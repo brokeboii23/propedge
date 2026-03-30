@@ -1,0 +1,1135 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PropEdge — Prop Analytics</title>
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #13161e;
+    --surface2: #1a1e2a;
+    --surface3: #20253a;
+    --border: #252a3a;
+    --border2: #2e3450;
+    --accent: #4f8eff;
+    --accent2: #6fa3ff;
+    --green: #22c55e;
+    --green-dim: #16a34a;
+    --yellow: #eab308;
+    --yellow-dim: #ca8a04;
+    --red: #ef4444;
+    --red-dim: #dc2626;
+    --text: #e8eaf0;
+    --text2: #9aa0b8;
+    --text3: #5c6280;
+    --radius: 14px;
+    --radius-sm: 8px;
+    --shadow: 0 4px 24px rgba(0,0,0,0.4);
+    --shadow-lg: 0 8px 40px rgba(0,0,0,0.6);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+    padding-bottom: 60px;
+  }
+
+  /* TOPBAR */
+  .topbar {
+    background: linear-gradient(90deg, #0d0f14 0%, #13161e 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 0 20px;
+    height: 62px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo-icon {
+    width: 34px; height: 34px;
+    background: linear-gradient(135deg, #4f8eff, #7c3aed);
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .logo-text {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    background: linear-gradient(90deg, #fff 0%, #9aa0b8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .logo-badge {
+    font-size: 10px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #4f8eff22, #7c3aed22);
+    border: 1px solid #4f8eff44;
+    color: var(--accent2);
+    padding: 2px 7px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+  }
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sport-pill {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text3);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+  }
+
+  /* MAIN LAYOUT */
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 28px 16px 0;
+  }
+
+  /* SECTION TITLE */
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 12px;
+    padding-left: 2px;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+  }
+  .card-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text2);
+    letter-spacing: 0.3px;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title-icon {
+    width: 24px; height: 24px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    background: var(--surface3);
+  }
+
+  /* FORM */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .form-grid.three { grid-template-columns: 1fr 1fr 1fr; }
+  .form-full { grid-column: 1 / -1; }
+  @media (max-width: 560px) {
+    .form-grid, .form-grid.three { grid-template-columns: 1fr; }
+    .form-full { grid-column: 1; }
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .field label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text3);
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+  .field input, .field select {
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    color: var(--text);
+    border-radius: var(--radius-sm);
+    padding: 10px 13px;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .field input:focus, .field select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(79,142,255,0.1);
+  }
+  .field input::placeholder { color: var(--text3); }
+  .select-wrap {
+    position: relative;
+  }
+  .select-wrap::after {
+    content: "▾";
+    position: absolute;
+    right: 12px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--text3);
+    pointer-events: none;
+    font-size: 12px;
+  }
+  .select-wrap select { padding-right: 30px; width: 100%; }
+
+  /* TOGGLE */
+  .toggle-group {
+    display: flex;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-sm);
+    padding: 3px;
+    gap: 3px;
+  }
+  .toggle-btn {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: none;
+    background: transparent;
+    color: var(--text3);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    letter-spacing: 0.3px;
+  }
+  .toggle-btn.active-over {
+    background: linear-gradient(135deg, #22c55e22, #16a34a33);
+    color: var(--green);
+    border: 1px solid #22c55e44;
+  }
+  .toggle-btn.active-under {
+    background: linear-gradient(135deg, #ef444422, #dc262633);
+    color: var(--red);
+    border: 1px solid #ef444444;
+  }
+
+  /* CTA BUTTON */
+  .analyze-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #4f8eff, #7c3aed);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+    transition: opacity 0.2s, transform 0.15s;
+    font-family: inherit;
+    margin-top: 4px;
+    box-shadow: 0 4px 20px rgba(79,142,255,0.25);
+  }
+  .analyze-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  .analyze-btn:active { transform: translateY(0); }
+
+  /* RESULTS (hidden until analyzed) */
+  #results { display: none; }
+
+  /* MAIN RESULT CARD */
+  .result-hero {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 26px 24px 22px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+  }
+  .result-hero::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+  .result-hero.strong::before { background: linear-gradient(90deg, var(--green), #4ade80); }
+  .result-hero.flex::before { background: linear-gradient(90deg, var(--yellow), #fbbf24); }
+  .result-hero.avoid::before { background: linear-gradient(90deg, var(--red), #f87171); }
+
+  .hero-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .hero-player {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .hero-name {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    line-height: 1;
+  }
+  .hero-meta {
+    font-size: 12px;
+    color: var(--text3);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .hero-meta span { color: var(--text2); }
+  .ev-badge {
+    font-size: 12px;
+    font-weight: 800;
+    padding: 5px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+  }
+  .ev-badge.positive {
+    background: #22c55e22;
+    border: 1px solid #22c55e55;
+    color: var(--green);
+  }
+  .ev-badge.negative {
+    background: #ef444422;
+    border: 1px solid #ef444455;
+    color: var(--red);
+  }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  @media (max-width: 440px) { .hero-stats { grid-template-columns: 1fr 1fr; } }
+  .hero-stat {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .hero-stat-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text3);
+  }
+  .hero-stat-val {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  .hero-stat-sub {
+    font-size: 11px;
+    color: var(--text3);
+  }
+
+  /* BIG BADGE */
+  .pick-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    margin-bottom: 16px;
+  }
+  .pick-badge.strong {
+    background: linear-gradient(135deg, #22c55e22, #16a34a33);
+    border: 1.5px solid #22c55e66;
+    color: var(--green);
+  }
+  .pick-badge.flex {
+    background: linear-gradient(135deg, #eab30822, #ca8a0433);
+    border: 1.5px solid #eab30866;
+    color: var(--yellow);
+  }
+  .pick-badge.avoid {
+    background: linear-gradient(135deg, #ef444422, #dc262633);
+    border: 1.5px solid #ef444466;
+    color: var(--red);
+  }
+
+  /* EV BAR */
+  .ev-bar-wrap {
+    margin-top: 4px;
+  }
+  .ev-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--text3);
+    margin-bottom: 6px;
+  }
+  .ev-bar-track {
+    background: var(--surface3);
+    border-radius: 6px;
+    height: 8px;
+    position: relative;
+    overflow: visible;
+  }
+  .ev-bar-center {
+    position: absolute;
+    left: 50%;
+    top: -2px; bottom: -2px;
+    width: 2px;
+    background: var(--border2);
+    border-radius: 2px;
+    transform: translateX(-50%);
+  }
+  .ev-bar-fill {
+    position: absolute;
+    top: 0; bottom: 0;
+    border-radius: 6px;
+    transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .edge-strength {
+    font-size: 12px;
+    font-weight: 700;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text2);
+  }
+  .edge-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+
+  /* PROB COMPARISON */
+  .prob-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .prob-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .prob-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+  }
+  .prob-meta-label { color: var(--text2); font-weight: 600; }
+  .prob-meta-val { color: var(--text); font-weight: 700; font-size: 13px; }
+  .prob-bar-track {
+    background: var(--surface3);
+    border-radius: 6px;
+    height: 7px;
+    overflow: hidden;
+  }
+  .prob-bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.7s cubic-bezier(0.4,0,0.2,1);
+  }
+  .prob-bar-fill.market { background: linear-gradient(90deg, #4f8eff, #7c3aed); }
+  .prob-bar-fill.true { background: linear-gradient(90deg, #22c55e, #4ade80); }
+
+  /* SLIP ANALYSIS */
+  .slip-best-use {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+  }
+  .slip-best-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text3);
+    white-space: nowrap;
+  }
+  .slip-best-val {
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: -0.2px;
+  }
+  .slip-best-val.good { color: var(--green); }
+  .slip-best-val.none { color: var(--red); }
+
+  .slip-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+  @media (max-width: 680px) { .slip-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 420px) { .slip-grid { grid-template-columns: 1fr; } }
+
+  .slip-card {
+    background: var(--surface2);
+    border-radius: 11px;
+    padding: 14px 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 9px;
+    transition: border-color 0.2s, background 0.2s;
+    border: 1px solid transparent;
+  }
+  .slip-card.eligible {
+    border-color: #22c55e44;
+    background: linear-gradient(135deg, #22c55e09 0%, #13161e 100%);
+  }
+  .slip-card.ineligible {
+    border-color: #ef444428;
+    background: linear-gradient(135deg, #ef444409 0%, #13161e 100%);
+  }
+
+  .slip-type-name {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: -0.2px;
+    line-height: 1.2;
+  }
+  .slip-type-name.eligible  { color: var(--text); }
+  .slip-type-name.ineligible { color: var(--text3); }
+
+  .slip-type-tag {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .slip-type-tag.power { background: #4f8eff18; color: #6fa3ff; border: 1px solid #4f8eff33; }
+  .slip-type-tag.flex  { background: #a855f718; color: #c084fc; border: 1px solid #a855f733; }
+
+  .slip-verdict-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+  }
+  .slip-verdict-row.eligible   { color: var(--green); }
+  .slip-verdict-row.ineligible { color: var(--red); }
+  .slip-verdict-icon { font-size: 13px; line-height: 1; }
+
+  /* SPORTSBOOK DETAILS */
+  .sb-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .sb-row:last-child { border-bottom: none; }
+  .sb-label { font-size: 13px; color: var(--text2); font-weight: 500; flex: 1; }
+  .sb-val { font-size: 14px; font-weight: 700; color: var(--text); }
+  .sb-tag {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 12px;
+    letter-spacing: 0.3px;
+  }
+  .sb-tag.edge { background: #22c55e22; color: #22c55e; border: 1px solid #22c55e33; }
+  .sb-tag.no-edge { background: #ef444422; color: #ef4444; border: 1px solid #ef444433; }
+  .sb-tag.marginal { background: #eab30822; color: #eab308; border: 1px solid #eab30833; }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 6px 0 18px;
+  }
+
+  /* FOOTER RESET BTN */
+  .reset-btn {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    border: 1px solid var(--border2);
+    color: var(--text3);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+    margin-top: 8px;
+  }
+  .reset-btn:hover { border-color: var(--accent); color: var(--accent2); }
+
+  /* TOOLTIP DOT */
+  .info-dot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px; height: 16px;
+    background: var(--surface3);
+    border-radius: 50%;
+    font-size: 9px;
+    color: var(--text3);
+    cursor: help;
+    margin-left: 4px;
+    border: 1px solid var(--border2);
+  }
+
+  /* ANIMATED IN */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .anim { animation: fadeUp 0.4s ease both; }
+  .anim-d1 { animation-delay: 0.05s; }
+  .anim-d2 { animation-delay: 0.1s; }
+  .anim-d3 { animation-delay: 0.15s; }
+  .anim-d4 { animation-delay: 0.2s; }
+  .anim-d5 { animation-delay: 0.25s; }
+
+  /* ERROR */
+  .error-msg {
+    background: #ef444422;
+    border: 1px solid #ef444444;
+    color: #f87171;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    margin-top: 10px;
+    display: none;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+  select option { background: #1a1e2a; }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-icon">⚡</div>
+    <span class="logo-text">PropEdge</span>
+    <span class="logo-badge">BETA</span>
+  </div>
+  <div class="topbar-right">
+    <span class="sport-pill" id="topSport">— SELECT SPORT</span>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+  <!-- INPUT CARD -->
+  <div class="section-label">Prop Analysis</div>
+  <div class="card" id="inputCard">
+    <div class="card-title">
+      <div class="card-title-icon">🎯</div>
+      Enter Your Prop
+    </div>
+
+    <div class="form-grid" style="margin-bottom:12px;">
+      <div class="field">
+        <label>Player Name</label>
+        <input type="text" id="playerName" placeholder="e.g. LeBron James" />
+      </div>
+      <div class="field">
+        <label>Sport</label>
+        <div class="select-wrap">
+          <select id="sportSelect" onchange="updateStatOptions()">
+            <option value="">— Select Sport</option>
+            <option value="NBA">🏀 NBA</option>
+            <option value="NFL">🏈 NFL</option>
+            <option value="MLB">⚾ MLB</option>
+            <option value="Soccer">⚽ Soccer</option>
+            <option value="Tennis">🎾 Tennis</option>
+            <option value="Other">🎮 Other</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-grid" style="margin-bottom:12px;">
+      <div class="field">
+        <label>Stat Type</label>
+        <div class="select-wrap">
+          <select id="statSelect">
+            <option value="">— Select Sport First</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Betting Line</label>
+        <input type="number" id="bettingLine" placeholder="e.g. 24.5" step="0.5" />
+      </div>
+    </div>
+
+    <div class="form-grid three" style="margin-bottom:12px;">
+      <div class="field">
+        <label>Over Odds</label>
+        <input type="number" id="overOdds" placeholder="-110" />
+      </div>
+      <div class="field">
+        <label>Under Odds</label>
+        <input type="number" id="underOdds" placeholder="-110" />
+      </div>
+      <div class="field">
+        <label>Bet Side</label>
+        <div class="toggle-group">
+          <button class="toggle-btn" id="btnOver" onclick="setSide('over')">▲ Over</button>
+          <button class="toggle-btn" id="btnUnder" onclick="setSide('under')">▼ Under</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="error-msg" id="errMsg">⚠ Please fill in all required fields.</div>
+    <button class="analyze-btn" onclick="analyze()">Analyze This Prop →</button>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results">
+
+    <!-- MAIN HERO RESULT -->
+    <div class="section-label">Result</div>
+    <div class="result-hero anim anim-d1" id="heroCard">
+      <div class="hero-top">
+        <div class="hero-player">
+          <div class="hero-name" id="heroName">—</div>
+          <div class="hero-meta">
+            <span id="heroSport">—</span> · <span id="heroStat">—</span> · Line <span id="heroLine">—</span> · <span id="heroSide">—</span>
+          </div>
+        </div>
+        <div class="ev-badge" id="evBadge">—</div>
+      </div>
+
+      <div id="pickBadge" class="pick-badge strong">✦ Strong Pick</div>
+
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-label">True Prob</div>
+          <div class="hero-stat-val" id="trueProbVal">—</div>
+          <div class="hero-stat-sub">No-vig probability</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-label">Fair Odds</div>
+          <div class="hero-stat-val" id="fairOddsVal">—</div>
+          <div class="hero-stat-sub">Without the vig</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-label">Market Edge</div>
+          <div class="hero-stat-val" id="edgeVal">—</div>
+          <div class="hero-stat-sub">vs. no-vig line</div>
+        </div>
+      </div>
+
+      <div class="ev-bar-wrap">
+        <div class="ev-bar-label">
+          <span>Negative EV</span>
+          <span id="evLabel">Expected Value</span>
+          <span>Positive EV</span>
+        </div>
+        <div class="ev-bar-track">
+          <div class="ev-bar-center"></div>
+          <div class="ev-bar-fill" id="evBarFill"></div>
+        </div>
+      </div>
+
+      <div class="edge-strength" id="edgeStrengthLabel">
+        <div class="edge-dot" id="edgeDot"></div>
+        <span id="edgeStrText">—</span>
+      </div>
+    </div>
+
+    <!-- PROBABILITY COMPARISON -->
+    <div class="card anim anim-d2">
+      <div class="card-title">
+        <div class="card-title-icon">📊</div>
+        Probability Breakdown
+      </div>
+      <div class="prob-row">
+        <div class="prob-item">
+          <div class="prob-meta">
+            <span class="prob-meta-label">Market Implied Prob.</span>
+            <span class="prob-meta-val" id="mktProbLabel">—</span>
+          </div>
+          <div class="prob-bar-track">
+            <div class="prob-bar-fill market" id="mktProbBar" style="width:0%"></div>
+          </div>
+        </div>
+        <div class="prob-item">
+          <div class="prob-meta">
+            <span class="prob-meta-label">True No-Vig Prob.</span>
+            <span class="prob-meta-val" id="trueNoVigLabel">—</span>
+          </div>
+          <div class="prob-bar-track">
+            <div class="prob-bar-fill true" id="trueNoVigBar" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sb-row">
+        <span class="sb-label">Total Vig (bookmaker margin)</span>
+        <span class="sb-val" id="vigVal">—</span>
+      </div>
+      <div class="sb-row">
+        <span class="sb-label">Over Implied Prob.</span>
+        <span class="sb-val" id="overImpLabel">—</span>
+      </div>
+      <div class="sb-row">
+        <span class="sb-label">Under Implied Prob.</span>
+        <span class="sb-val" id="underImpLabel">—</span>
+      </div>
+    </div>
+
+    <!-- SLIP ANALYSIS -->
+    <div class="card anim anim-d3">
+      <div class="card-title">
+        <div class="card-title-icon">🎰</div>
+        Best Slip Types For This Prop
+      </div>
+      <div class="slip-best-use" id="slipBestUse">
+        <span class="slip-best-label">Best Use</span>
+        <span class="slip-best-val good" id="slipBestVal">—</span>
+      </div>
+      <div class="slip-grid" id="slipGrid">
+        <!-- filled by JS -->
+      </div>
+    </div>
+
+    <!-- SPORTSBOOK DETAILS -->
+    <div class="card anim anim-d4">
+      <div class="card-title">
+        <div class="card-title-icon">📋</div>
+        Sportsbook Breakdown
+      </div>
+      <div class="sb-row">
+        <span class="sb-label">Your Bet Side</span>
+        <span class="sb-val" id="sbSide">—</span>
+      </div>
+      <div class="sb-row">
+        <span class="sb-label">Bet Odds</span>
+        <span class="sb-val" id="sbOdds">—</span>
+      </div>
+      <div class="sb-row">
+        <span class="sb-label">Fair Value Odds</span>
+        <span class="sb-val" id="sbFair">—</span>
+      </div>
+      <div class="sb-row">
+        <span class="sb-label">EV per $100 wagered</span>
+        <span class="sb-val" id="sbEV">—</span>
+        <span class="sb-tag" id="sbEvTag">—</span>
+      </div>
+      <div class="sb-row">
+        <span class="sb-label">Confidence Tier</span>
+        <span class="sb-val" id="sbConf">—</span>
+        <span class="sb-tag" id="sbConfTag">—</span>
+      </div>
+    </div>
+
+    <button class="reset-btn anim anim-d5" onclick="resetForm()">↺ Analyze Another Prop</button>
+  </div>
+
+</div>
+
+<script>
+  const STATS = {
+    NBA: ['Points','Rebounds','Assists','PRA','3-Pointers Made','Blocks','Steals'],
+    NFL: ['Passing Yards','Rushing Yards','Receiving Yards','Receptions','Passing TDs'],
+    MLB: ['Hits','Home Runs','Total Bases','Strikeouts','RBIs'],
+    Soccer: ['Goals','Shots','Shots on Target','Assists'],
+    Tennis: ['Aces','Double Faults','Games Won'],
+    Other: ['Custom Stat']
+  };
+
+  let betSide = null;
+
+  function updateStatOptions() {
+    const sport = document.getElementById('sportSelect').value;
+    const sel = document.getElementById('statSelect');
+    document.getElementById('topSport').textContent = sport || '— SELECT SPORT';
+    sel.innerHTML = '';
+    if (!sport) {
+      sel.innerHTML = '<option value="">— Select Sport First</option>';
+      return;
+    }
+    const options = STATS[sport] || [];
+    sel.innerHTML = '<option value="">— Select Stat</option>';
+    options.forEach(o => {
+      const opt = document.createElement('option');
+      opt.value = o; opt.textContent = o;
+      sel.appendChild(opt);
+    });
+    if (sport === 'Other') {
+      sel.innerHTML = '<option value="">— Custom Stat</option>';
+      const custOpt = document.createElement('option');
+      custOpt.value = 'custom'; custOpt.textContent = 'Enter manually below';
+      sel.appendChild(custOpt);
+    }
+  }
+
+  function setSide(side) {
+    betSide = side;
+    const btnOver = document.getElementById('btnOver');
+    const btnUnder = document.getElementById('btnUnder');
+    btnOver.className = 'toggle-btn' + (side === 'over' ? ' active-over' : '');
+    btnUnder.className = 'toggle-btn' + (side === 'under' ? ' active-under' : '');
+  }
+
+  function impliedProb(odds) {
+    odds = parseFloat(odds);
+    if (odds < 0) return Math.abs(odds) / (Math.abs(odds) + 100);
+    return 100 / (odds + 100);
+  }
+
+  function fairOdds(p) {
+    if (p >= 1) p = 0.9999;
+    if (p <= 0) p = 0.0001;
+    if (p > 0.5) return -(p / (1 - p)) * 100;
+    return ((1 - p) / p) * 100;
+  }
+
+  function fmtOdds(o) {
+    o = Math.round(o);
+    return o > 0 ? '+' + o : '' + o;
+  }
+
+  function fmtPct(p) { return (p * 100).toFixed(1) + '%'; }
+
+  function calcEV(p, odds) {
+    odds = parseFloat(odds);
+    let profit = odds > 0 ? odds : 10000 / Math.abs(odds);
+    return (p * profit) - ((1 - p) * 100);
+  }
+
+  function analyze() {
+    const player = document.getElementById('playerName').value.trim();
+    const sport = document.getElementById('sportSelect').value;
+    const stat = document.getElementById('statSelect').value;
+    const line = parseFloat(document.getElementById('bettingLine').value);
+    const overOdds = document.getElementById('overOdds').value;
+    const underOdds = document.getElementById('underOdds').value;
+    const err = document.getElementById('errMsg');
+
+    if (!player || !sport || !stat || isNaN(line) || !overOdds || !underOdds || !betSide) {
+      err.style.display = 'block';
+      err.textContent = '⚠ Please fill in all fields and select a bet side.';
+      return;
+    }
+    err.style.display = 'none';
+
+    // Core calculations
+    const oImp = impliedProb(overOdds);
+    const uImp = impliedProb(underOdds);
+    const vig = (oImp + uImp) - 1;
+    const oNoVig = oImp / (oImp + uImp);
+    const uNoVig = uImp / (oImp + uImp);
+
+    const trueProb = betSide === 'over' ? oNoVig : uNoVig;
+    const mktProb  = betSide === 'over' ? oImp   : uImp;
+    const betOdds  = betSide === 'over' ? parseFloat(overOdds) : parseFloat(underOdds);
+    const fOdds    = fairOdds(trueProb);
+    const edge     = trueProb - mktProb;
+    const ev       = calcEV(trueProb, betOdds);
+
+    // Hero tier
+    let tier, tierClass;
+    if (trueProb >= 0.60 && ev > 3) { tier = '✦ Strong Pick'; tierClass = 'strong'; }
+    else if (trueProb >= 0.54 || ev > 0) { tier = '◈ Flex Play Only'; tierClass = 'flex'; }
+    else { tier = '✕ Not Recommended'; tierClass = 'avoid'; }
+
+    const evPositive = ev > 0;
+
+    // Edge strength
+    let edgeStr, edgeColor;
+    const absEdge = Math.abs(edge);
+    if (absEdge >= 0.06) { edgeStr = 'Strong Edge'; edgeColor = '#22c55e'; }
+    else if (absEdge >= 0.03) { edgeStr = 'Moderate Edge'; edgeColor = '#eab308'; }
+    else { edgeStr = 'Weak Edge'; edgeColor = '#ef4444'; }
+
+    // EV bar
+    let evBarStyle;
+    const evPct = Math.min(Math.abs(ev) / 20, 1);
+    if (ev >= 0) {
+      evBarStyle = `left:50%;width:${evPct*50}%;background:linear-gradient(90deg,#22c55e,#4ade80)`;
+    } else {
+      evBarStyle = `right:50%;width:${evPct*50}%;background:linear-gradient(270deg,#ef4444,#f87171)`;
+    }
+
+    // ---- SLIP TYPES ----
+    // Power requires higher true prob (all legs must win)
+    // Flex is more forgiving (partial wins pay)
+    // Thresholds scale with leg count (more legs = higher prob needed per leg)
+    const slipTypes = [
+      { name: '2 Leg Power', format: 'power', threshold: 0.60 },
+      { name: '3 Leg Flex',  format: 'flex',  threshold: 0.56 },
+      { name: '3 Leg Power', format: 'power', threshold: 0.64 },
+      { name: '4 Leg Flex',  format: 'flex',  threshold: 0.59 },
+      { name: '4 Leg Power', format: 'power', threshold: 0.68 },
+      { name: '5 Leg Flex',  format: 'flex',  threshold: 0.62 },
+      { name: '6 Leg Flex',  format: 'flex',  threshold: 0.65 },
+    ];
+
+    // Best use = highest-value qualifying slip
+    // Priority: Power > Flex at same leg count; more legs = higher payout value
+    // We evaluate in value order: 4LP > 3LP > 2LP > 6LF > 5LF > 4LF > 3LF
+    const valuePriority = [
+      { name: '4 Leg Power', format: 'power', threshold: 0.68 },
+      { name: '3 Leg Power', format: 'power', threshold: 0.64 },
+      { name: '2 Leg Power', format: 'power', threshold: 0.60 },
+      { name: '6 Leg Flex',  format: 'flex',  threshold: 0.65 },
+      { name: '5 Leg Flex',  format: 'flex',  threshold: 0.62 },
+      { name: '4 Leg Flex',  format: 'flex',  threshold: 0.59 },
+      { name: '3 Leg Flex',  format: 'flex',  threshold: 0.56 },
+    ];
+    const bestSlip = valuePriority.find(s => trueProb >= s.threshold) || null;
+
+    // ---- RENDER HERO ----
+    document.getElementById('heroName').textContent = player;
+    document.getElementById('heroSport').textContent = sport;
+    document.getElementById('heroStat').textContent = stat;
+    document.getElementById('heroLine').textContent = line;
+    document.getElementById('heroSide').textContent = betSide === 'over' ? '▲ Over' : '▼ Under';
+    document.getElementById('trueProbVal').textContent = fmtPct(trueProb);
+    document.getElementById('fairOddsVal').textContent = fmtOdds(fOdds);
+    document.getElementById('edgeVal').textContent = (edge >= 0 ? '+' : '') + fmtPct(edge);
+    document.getElementById('edgeVal').style.color = edge >= 0 ? 'var(--green)' : 'var(--red)';
+
+    document.getElementById('heroCard').className = 'result-hero anim anim-d1 ' + tierClass;
+    const badge = document.getElementById('pickBadge');
+    badge.textContent = tier;
+    badge.className = 'pick-badge ' + tierClass;
+
+    const evBadge = document.getElementById('evBadge');
+    evBadge.textContent = evPositive ? '+EV' : '-EV';
+    evBadge.className = 'ev-badge ' + (evPositive ? 'positive' : 'negative');
+
+    document.getElementById('evBarFill').style = evBarStyle;
+    document.getElementById('evLabel').textContent = `EV: ${ev >= 0 ? '+' : ''}$${ev.toFixed(2)} per $100`;
+    document.getElementById('edgeDot').style.background = edgeColor;
+    document.getElementById('edgeStrText').textContent = edgeStr + ' — ' + fmtPct(Math.abs(edge)) + ' edge vs. fair line';
+    document.getElementById('edgeStrText').style.color = edgeColor;
+
+    // Prob bars
+    document.getElementById('mktProbLabel').textContent = fmtPct(mktProb);
+    document.getElementById('trueNoVigLabel').textContent = fmtPct(trueProb);
+    document.getElementById('mktProbBar').style.width = (mktProb * 100) + '%';
+    document.getElementById('trueNoVigBar').style.width = (trueProb * 100) + '%';
+    document.getElementById('vigVal').textContent = fmtPct(vig);
+    document.getElementById('overImpLabel').textContent = fmtPct(oImp);
+    document.getElementById('underImpLabel').textContent = fmtPct(uImp);
+
+    // ---- BEST USE BANNER ----
+    const bestValEl = document.getElementById('slipBestVal');
+    if (bestSlip) {
+      bestValEl.textContent = bestSlip.name;
+      bestValEl.className = 'slip-best-val good';
+    } else {
+      bestValEl.textContent = 'Not Recommended';
+      bestValEl.className = 'slip-best-val none';
+    }
+
+    // ---- SLIP GRID ----
+    const grid = document.getElementById('slipGrid');
+    grid.innerHTML = '';
+    slipTypes.forEach(s => {
+      const ok = trueProb >= s.threshold;
+      const cardCls    = ok ? 'eligible' : 'ineligible';
+      const nameCls    = ok ? 'eligible' : 'ineligible';
+      const rowCls     = ok ? 'eligible' : 'ineligible';
+      const icon       = ok ? '✅' : '❌';
+      const verdictTxt = ok ? 'Good for this slip' : 'Not recommended';
+      grid.innerHTML += `
+        <div class="slip-card ${cardCls}">
+          <div class="slip-type-name ${nameCls}">${s.name}</div>
+          <span class="slip-type-tag ${s.format}">${s.format === 'power' ? 'Power' : 'Flex'}</span>
+          <div class="slip-verdict-row ${rowCls}">
+            <span class="slip-verdict-icon">${icon}</span>
+            <span>${verdictTxt}</span>
+          </div>
+        </div>`;
+    });
+
+    // ---- SPORTSBOOK BREAKDOWN ----
+    document.getElementById('sbSide').textContent = betSide === 'over' ? '▲ Over' : '▼ Under';
+    document.getElementById('sbOdds').textContent = fmtOdds(betOdds);
+    document.getElementById('sbFair').textContent = fmtOdds(fOdds);
+    document.getElementById('sbEV').textContent = (ev >= 0 ? '+' : '') + '$' + ev.toFixed(2);
+    document.getElementById('sbEV').style.color = ev >= 0 ? 'var(--green)' : 'var(--red)';
+    const evTag = document.getElementById('sbEvTag');
+    evTag.textContent = ev >= 3 ? 'Strong +EV' : ev >= 0 ? 'Slight +EV' : 'Negative EV';
+    evTag.className = 'sb-tag ' + (ev >= 3 ? 'edge' : ev >= 0 ? 'marginal' : 'no-edge');
+
+    const conf = trueProb >= 0.62 ? 'High Confidence' : trueProb >= 0.54 ? 'Medium Confidence' : 'Low Confidence';
+    const confCls = trueProb >= 0.62 ? 'edge' : trueProb >= 0.54 ? 'marginal' : 'no-edge';
+    document.getElementById('sbConf').textContent = conf;
+    document.getElementById('sbConfTag').textContent = trueProb >= 0.62 ? 'Grade A' : trueProb >= 0.54 ? 'Grade B' : 'Grade C';
+    document.getElementById('sbConfTag').className = 'sb-tag ' + confCls;
+
+    document.getElementById('results').style.display = 'block';
+    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function resetForm() {
+    document.getElementById('results').style.display = 'none';
+    document.getElementById('playerName').value = '';
+    document.getElementById('sportSelect').value = '';
+    document.getElementById('statSelect').innerHTML = '<option value="">— Select Sport First</option>';
+    document.getElementById('bettingLine').value = '';
+    document.getElementById('overOdds').value = '';
+    document.getElementById('underOdds').value = '';
+    document.getElementById('topSport').textContent = '— SELECT SPORT';
+    betSide = null;
+    document.getElementById('btnOver').className = 'toggle-btn';
+    document.getElementById('btnUnder').className = 'toggle-btn';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
